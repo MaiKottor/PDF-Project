@@ -1,0 +1,27 @@
+﻿@model PDF_Project.Models.CLIInput
+
+<h2>PDF Processing CLI</h2>
+
+<form action="/Home/GenerateReport" method="post">
+    <div>
+        <label for="InputFilePath">Input File Path:</label>
+        <input type="text" id="InputFilePath" name="InputFilePath" placeholder="foldername/filename.path" required />
+    </div>
+    <div>
+        <label for="OutputFilePath">Output File Path:</label>
+        <input type="text" id="OutputFilePath" name="OutputFilePath" placeholder="foldername/filename.path" required />
+    </div>
+    <button type="submit">Generate Report</button>
+</form>
+@if (ViewBag.Message != null)
+{
+    <div style="margin-top: 20px;">
+        <strong>@ViewBag.Message</strong>
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div style="color: red; font-weight: bold;">
+        @ViewBag.Error
+    </div>
+}

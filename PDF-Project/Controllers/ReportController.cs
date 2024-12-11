@@ -25,8 +25,10 @@ namespace PDF_Project.Controllers
 				return BadRequest("No file paths provided.");
 			}
 
-			// Process files
-			var metadataList = _pdfProcessor.ProcessFilesParallel(request.FilePaths);
+			// Convert relative paths to absolute paths
+			var absolutePaths = request.FilePaths.Select(path => Path.Combine(Directory.GetCurrentDirectory(), path)).ToList();
+
+			var metadataList = _pdfProcessor.ProcessFilesParallel(absolutePaths);
 
 			// Analyze metadata
 			var report = AnalyzeMetadata(metadataList);
@@ -34,8 +36,9 @@ namespace PDF_Project.Controllers
 			// Save the report
 			try
 			{
+				var outputPath = Path.Combine(Directory.GetCurrentDirectory(), request.OutputPath);
 				var jsonReport = JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true });
-				System.IO.File.WriteAllText(request.OutputPath, jsonReport);
+				System.IO.File.WriteAllText(outputPath, jsonReport);
 			}
 			catch (Exception ex)
 			{

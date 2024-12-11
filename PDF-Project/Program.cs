@@ -1,25 +1,34 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Add services to the container
+builder.Services.AddControllersWithViews(); // MVC services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Configure middleware
+if (!app.Environment.IsDevelopment())
+{
+	app.UseExceptionHandler("/Home/Error");
+	app.UseHsts();
+}
+else
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles(); // Enable static file serving (CSS/JS if used)
+app.UseRouting(); // Must come before authorization
 app.UseAuthorization();
 
-app.MapControllers();
+// Configure routing
+app.MapControllerRoute(
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}/{id?}"); // Default route
 
 app.Run();
+

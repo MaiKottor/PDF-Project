@@ -15,9 +15,9 @@ namespace PDF_Project.Services
 				return new PdfMetadata
 				{
 					FilePath = filePath,
-					Title = information.Title,
-					Author = information.Author,
-					CreationDate =Convert.ToDateTime(information.CreationDate),
+					Title = information.Title ?? "Unknown Title",
+					Author = information.Author ?? "Unknown Author",
+					CreationDate = information.CreationDate ?? DateTime.MinValue.ToString(),
 					NumberOfPages = pdf.NumberOfPages
 				};
 			}
